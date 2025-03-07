@@ -35,8 +35,8 @@ class SocialMediaController extends Controller
 
         match ($request->type) {
             SocialMediaOptions::Facebook->value => $this->setIntegrationStrategy(new FacebookPostsStrategy()),
-            SocialMediaOptions::Instagram->value => $this->setIntegrationStrategy(new FacebookPostsStrategy()),
-            SocialMediaOptions::Linkedin->value => $this->setIntegrationStrategy(new FacebookPostsStrategy()),
+            SocialMediaOptions::Instagram->value => null,
+            SocialMediaOptions::Linkedin->value => null,
             default => null
         };
 
