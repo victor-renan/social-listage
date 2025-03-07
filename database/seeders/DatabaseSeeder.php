@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Enums\SocialMediaOptions;
+use App\Models\SocialMedia;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -13,11 +15,11 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        User::factory()->create();
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        SocialMedia::factory()->create([
+            'name' => SocialMediaOptions::Facebook,
+            'token' => env('FACEBOOK_TOKEN')
         ]);
     }
 }
