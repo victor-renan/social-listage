@@ -11,11 +11,9 @@ class FacebookPostsStrategy implements PostsStrategy
 
     public function getPosts(SocialMedia $instance): array
     {
-        $response = Http::get($this->apiUrl, [
+        return Http::get($this->apiUrl, [
             'access_token' => $instance->token,
             'fields' => 'actions,attachments{description,media,media_type,title,subattachments,description_tags,target,type,unshimmed_url,url},caption,is_hidden,is_expired,message,from,place,status_type,reactions,created_time',
-        ]);
-
-        return $response->json()['data'];
+        ])->json();
     }
 }

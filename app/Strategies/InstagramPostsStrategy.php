@@ -11,11 +11,9 @@ class InstagramPostsStrategy implements PostsStrategy
 
     public function getPosts(SocialMedia $instance): array
     {
-        $response = Http::get($this->apiUrl, [
+        return Http::get($this->apiUrl, [
             'access_token' => $instance->token,
             'fields' => 'fields=id,thumbnail_url,media_type,media_url,username,owner{name,username},timestamp,like_count,is_shared_to_feed,comments_count,caption',
-        ]);
-
-        return $response->json()['data'];
+        ])->json();
     }
 }
