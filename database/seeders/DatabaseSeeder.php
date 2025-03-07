@@ -21,5 +21,10 @@ class DatabaseSeeder extends Seeder
             'name' => SocialMediaOptions::Facebook,
             'token' => env('FACEBOOK_TOKEN')
         ]);
+
+        SocialMedia::factory()->create([
+            'name' => SocialMediaOptions::Instagram,
+            'token' => env('INSTA_TOKEN')
+        ]);
     }
 }

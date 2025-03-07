@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Enums\SocialMediaOptions;
 use App\Models\SocialMedia;
 use App\Strategies\FacebookPostsStrategy;
+use App\Strategies\InstagramPostsStrategy;
 use App\Strategies\PostsStrategy;
 use Illuminate\Http\Request;
 
@@ -17,10 +18,16 @@ class SocialMediaController extends Controller
         $this->strategy = $strategy;
     }
 
+    /**
+     * Retrieves posts from a specified social media platform.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function posts(Request $request)
     {
         if (!$request->type) {
-            return response()->json([ 
+            return response()->json([
                 'message' => 'Escolha a plataforma desejada'
             ], 404);
         }
@@ -35,7 +42,7 @@ class SocialMediaController extends Controller
 
         match ($request->type) {
             SocialMediaOptions::Facebook->value => $this->setIntegrationStrategy(new FacebookPostsStrategy()),
-            SocialMediaOptions::Instagram->value => null,
+            SocialMediaOptions::Instagram->value => $this->setIntegrationStrategy(new InstagramPostsStrategy()),
             SocialMediaOptions::Linkedin->value => null,
             default => null
         };
