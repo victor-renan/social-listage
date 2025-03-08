@@ -21,7 +21,7 @@ class SocialMediaFactory extends Factory
     {
         return [
             'name' => fake()->name(),
-            'type' => array_rand(SocialMediaOptions::asArray()),
+            'type' => fake()->randomElement(SocialMediaOptions::getValues()),
             'token' => Str::random(50),
             'user_id' => User::latest()->first()->id
         ];

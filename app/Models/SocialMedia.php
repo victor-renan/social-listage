@@ -3,11 +3,11 @@
 namespace App\Models;
 
 use App\Enums\SocialMediaOptions;
+use BenSampo\Enum\Rules\EnumValue;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Validation\Rule;
-use \Illuminate\Validation\Validator;
 
 class SocialMedia extends Model
 {
@@ -43,7 +43,7 @@ class SocialMedia extends Model
         return (object) [
             'rules' => [
                 'name' => ['required', Rule::unique('social_media')->ignore($data['id'] ?? null)],
-                'type' => 'required',
+                'type' => ['required', new EnumValue(SocialMediaOptions::class)],
                 'user_id' => 'required',
                 'additional_info' => 'array',
             ],
