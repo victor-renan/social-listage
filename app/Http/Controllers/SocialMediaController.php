@@ -9,7 +9,6 @@ use App\Strategies\InstagramStrategy;
 use App\Strategies\LinkedinStrategy;
 use App\Strategies\SocialMediaStrategy;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 
 class SocialMediaController extends Controller
 {
@@ -33,7 +32,7 @@ class SocialMediaController extends Controller
     }
 
     /**
-     * Retrieves social media implementations
+     * Retrieves social media implementations.
      *
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse
@@ -49,6 +48,12 @@ class SocialMediaController extends Controller
         return response()->json($instances->get());
     }
 
+    /**
+     * Retrieves the details of a social media instance.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function details(Request $request)
     {
         $instance = SocialMedia::where(['id' => $request->id])->first();
@@ -61,7 +66,7 @@ class SocialMediaController extends Controller
     }
 
     /**
-     * Retrieves implementations based on the query param `type`
+     * Retrieves posts based on a strategy for each instance type
      *
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse
@@ -79,6 +84,12 @@ class SocialMediaController extends Controller
         return $this->socialMediaStrategy->posts($instance);
     }
 
+     /**
+     * Creates a new social media instance. Must match the validation method of the integration strategy
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function create(Request $request)
     {
         $this->matchIntegrationStrategy($request->type);
@@ -90,6 +101,12 @@ class SocialMediaController extends Controller
         return $this->save($request->all());
     }
 
+    /**
+     * Updates an existing social media instance. Must match the validation method of the integration strategy
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function update(Request $request)
     {
         $instance = SocialMedia::where(['id' => $request->id])->first();
@@ -108,6 +125,12 @@ class SocialMediaController extends Controller
         );
     }
 
+    /**
+     * Deletes a social media instance.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function delete(Request $request)
     {
         $instance = SocialMedia::where(['id' => $request->id])->first();
@@ -137,6 +160,12 @@ class SocialMediaController extends Controller
         }
     }
 
+    /**
+     * Saves a new instance or update a existing one. Executes the validate method to get a individual saving approach.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function save(array $data)
     {
         $validation = $this->socialMediaStrategy->validate($data);
