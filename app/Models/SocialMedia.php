@@ -45,7 +45,7 @@ class SocialMedia extends Model
                 'name' => ['required', Rule::unique('social_media')->ignore($data['id'] ?? null)],
                 'type' => ['required', new EnumValue(SocialMediaOptions::class)],
                 'user_id' => 'required',
-                'additional_info' => 'array',
+                'additional_info' => 'nullable|array',
             ],
             'messages' => [
                 'name.required' => 'Digite um nome',

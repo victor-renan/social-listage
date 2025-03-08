@@ -13,6 +13,17 @@ class LinkedinStrategy implements SocialMediaStrategy
 
     public function posts(SocialMedia $instance): JsonResponse
     {
+        $orgId = $instance->additional_info?->org_id;
+
+        if (!$orgId) {
+            return response()->json([
+                'type' => $instance->type,
+                'social' => [
+                    'message' => 'Atualize esta implementação adicionando o ID da empresa do Linkedin'
+                ],
+            ], 400);
+        }
+
         $headers = [
             'Authorization' => "Bearer $instance->token",
             'LinkedIn-Version' => '202502',
@@ -20,7 +31,7 @@ class LinkedinStrategy implements SocialMediaStrategy
 
         $params = [
             'q' => 'author',
-            'author' => 'urn:li:organization:' . $instance->additional_info->orgId,
+            'author' => "urn:li:organization:$orgId",
         ];
 
         $response = Http::withHeaders($headers)
