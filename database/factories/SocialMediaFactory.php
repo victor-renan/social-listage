@@ -20,7 +20,8 @@ class SocialMediaFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => array_rand(SocialMediaOptions::cases()),
+            'name' => fake()->name(),
+            'type' => array_rand(SocialMediaOptions::asArray()),
             'token' => Str::random(50),
             'user_id' => User::latest()->first()->id
         ];

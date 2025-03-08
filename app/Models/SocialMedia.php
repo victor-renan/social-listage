@@ -6,6 +6,8 @@ use App\Enums\SocialMediaOptions;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Validation\Rule;
+use \Illuminate\Validation\Validator;
 
 class SocialMedia extends Model
 {
@@ -13,7 +15,9 @@ class SocialMedia extends Model
 
     protected $fillable = [
         'name',
+        'type',
         'token',
+        'additional_info',
         'user_id',
     ];
 
@@ -24,12 +28,32 @@ class SocialMedia extends Model
     protected function casts(): array
     {
         return [
-            'name' => SocialMediaOptions::class,
+            'type' => SocialMediaOptions::class,
+            'additional_info' => 'array'
         ];
     }
 
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public static function validation(array $data): object
+    {
+        return (object) [
+            'rules' => [
+                'name' => ['required', Rule::unique('social_media')->ignore($data['id'] ?? null)],
+                'type' => 'required',
+                'user_id' => 'required',
+                'additional_info' => 'array',
+            ],
+            'messages' => [
+                'name.required' => 'Digite um nome',
+                'name.unique' => 'Uma integração com este nome já existe',
+                'type.required' => 'Escolha um tipo válido',
+                'user_id.required' => 'Usuário criador faltando',
+                'additional_info.array' => 'Este valor precisa ser um objeto válido',
+            ]
+        ];
     }
 }

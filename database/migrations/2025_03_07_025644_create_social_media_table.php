@@ -15,7 +15,9 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->string('name')->unique();
+            $table->string('type');
             $table->text('token');
+            $table->json('additional_info')->nullable()->default(null);
             $table->foreignId('user_id')->constrained('users');
         });
     }

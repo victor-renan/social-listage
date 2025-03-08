@@ -2,9 +2,11 @@
 
 namespace App\Enums;
 
-enum SocialMediaOptions: string
+use BenSampo\Enum\Enum;
+
+final class SocialMediaOptions extends Enum
 {
-    case Facebook = 'facebook';
-    case Instagram = 'instagram';
-    case Linkedin = 'linkedin';
+    public const Facebook = 'facebook';
+    public const Instagram = 'instagram';
+    public const Linkedin = 'linkedin';
 }

@@ -18,13 +18,24 @@ class DatabaseSeeder extends Seeder
         User::factory()->create();
 
         SocialMedia::factory()->create([
-            'name' => SocialMediaOptions::Facebook,
+            'type' => SocialMediaOptions::Facebook,
+            'name' => 'Facebook',
             'token' => env('FACEBOOK_TOKEN')
         ]);
 
         SocialMedia::factory()->create([
-            'name' => SocialMediaOptions::Instagram,
+            'type' => SocialMediaOptions::Instagram,
+            'name' => 'Instagram',
             'token' => env('INSTA_TOKEN')
+        ]);
+
+        SocialMedia::factory()->create([
+            'type' => SocialMediaOptions::Linkedin,
+            'name' => 'Linkedin',
+            'token' => env('LINKEDIN_TOKEN'),
+            'additional_info' => [
+                'org_id' => '106668152'
+            ],
         ]);
     }
 }
