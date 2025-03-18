@@ -10,10 +10,71 @@ use Http;
 class LinkedinStrategy implements SocialMediaStrategy
 {
     protected string $apiUrl = 'https://api.linkedin.com/rest/posts';
+    protected string $imageUrl = 'https://api.linkedin.com/rest/images';
+    protected string $videoUrl = 'https://api.linkedin.com/rest/videos';
+    protected int $count = 4;
+
+    private function filter(array $item): bool
+    {
+        return isset($item['content']['media']) || isset($item['content']['multiImage']);
+    }
+
+    private function fetchImageUrl(array $item, array $headers)
+    {
+        if (isset($item['content']['multiImage'])) {
+            $response = Http::withHeaders($headers)
+                ->timeout(5)
+                ->get("$this->imageUrl/" . $item['content']['multiImage']['images'][0]['id']);
+            return $response->ok() ? $response->json()['downloadUrl'] : null;
+        }
+
+        if (isset($item['content']['media']) && str_contains($item['content']['media']['id'], ':image:')) {
+            $response = Http::withHeaders($headers)
+                ->timeout(5)
+                ->get("$this->imageUrl/" . $item['content']['media']['id']);
+            return $response->ok() ? $response->json()['downloadUrl'] : null;
+        }
+
+        if (isset($item['content']['media']) && str_contains($item['content']['media']['id'], ':video:')) {
+            $response = Http::withHeaders($headers)
+                ->timeout(5)
+                ->get("$this->videoUrl/" . $item['content']['media']['id']);
+            return $response->ok() ? $response->json()['downloadUrl'] : null;
+        }
+
+        return null;
+    }
+
+    private function fetchPostUrl(array $item)
+    {
+        return 'https://linkedin.com/feed/update/' . $item['id'];
+    }
+
+    protected function postsAdapter(array $json, array $headers): array
+    {
+        $filtered = [];
+
+        foreach ($json['elements'] as $post) {
+            if ($this->filter($post)) {
+
+                array_push($filtered, [
+                    'url' => $this->fetchPostUrl($post),
+                    'image_url' => $this->fetchImageUrl($post, $headers)
+                ]);
+
+                if (count($filtered) == $this->count) {
+                    break;
+                }
+            }
+        }
+
+        return $filtered;
+    }
 
     public function posts(SocialMedia $instance): JsonResponse
     {
-        $orgId = $instance->additional_info?->org_id;
+        $c = (object) $instance->additional_info;
+        $orgId = $c?->org_id;
 
         if (!$orgId) {
             return response()->json([
@@ -41,7 +102,7 @@ class LinkedinStrategy implements SocialMediaStrategy
 
         return response()->json([
             'type' => $instance->type,
-            'social' => $response->json()
+            'posts' => $this->postsAdapter($response->json(), $headers)
         ], $response->status());
     }
 

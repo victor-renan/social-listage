@@ -19,19 +19,19 @@ class DatabaseSeeder extends Seeder
 
         SocialMedia::factory()->create([
             'type' => SocialMediaOptions::Facebook,
-            'name' => 'Facebook',
+            'name' => 'Facebooka',
             'token' => env('FACEBOOK_TOKEN')
         ]);
 
         SocialMedia::factory()->create([
             'type' => SocialMediaOptions::Instagram,
-            'name' => 'Instagram',
+            'name' => 'Instagrams',
             'token' => env('INSTA_TOKEN')
         ]);
 
         SocialMedia::factory()->create([
             'type' => SocialMediaOptions::Linkedin,
-            'name' => 'Linkedin',
+            'name' => 'Linkedidn',
             'token' => env('LINKEDIN_TOKEN'),
             'additional_info' => [
                 'org_id' => '106668152'

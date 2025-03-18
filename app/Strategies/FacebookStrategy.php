@@ -15,7 +15,7 @@ class FacebookStrategy implements SocialMediaStrategy
     {
         $params = [
             'access_token' => $instance->token,
-            'fields' => 'actions,attachments{description,media,media_type,title,subattachments,description_tags,target,type,unshimmed_url,url},caption,is_hidden,is_expired,message,from,place,status_type,reactions,created_time',
+            'fields' => 'actions,attachments{description,media,media_type,title,subattachments,description_tags,target,type,unshimmed_url,url},caption,is_hidden,is_expired,message,from,place,status_type,reactions,created_time,link',
         ];
 
         $response = Http::timeout(5)

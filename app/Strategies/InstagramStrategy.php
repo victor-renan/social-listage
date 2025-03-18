@@ -15,7 +15,7 @@ class InstagramStrategy implements SocialMediaStrategy
     {
         $params = [
             'access_token' => $instance->token,
-            'fields' => 'id,thumbnail_url,media_type,media_url,username,owner{name,username},timestamp,like_count,is_shared_to_feed,comments_count,caption',
+            'fields' => 'permalink,id,thumbnail_url,media_type,media_url,username,owner{name,username},timestamp,like_count,comments_count,caption',
         ];
 
         $response = Http::timeout(5)

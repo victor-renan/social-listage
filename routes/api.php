@@ -1,4 +1,4 @@
-    <?php
+<?php
 
 use App\Http\Controllers\SocialMediaController;
 use Illuminate\Http\Request;
