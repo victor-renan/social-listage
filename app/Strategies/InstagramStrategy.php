@@ -11,6 +11,15 @@ class InstagramStrategy implements SocialMediaStrategy
 {
     protected string $apiUrl = 'https://graph.instagram.com/v22.0/me/media';
 
+    protected function postsAdapter(array $json): array
+    {
+        return array_map(fn(array $item) => [
+            'url' => $item['permalink'],
+            'image_url' => $item['media_url'],
+            'likes' => $item['like_count']
+        ], $json['data'] ?? []);
+    }
+
     public function posts(SocialMedia $instance): JsonResponse
     {
         $params = [
@@ -24,7 +33,7 @@ class InstagramStrategy implements SocialMediaStrategy
 
         return response()->json([
             'type' => $instance->type,
-            'social' => $response->json()
+            'social' => $this->postsAdapter($response->json())
         ], $response->status());
     }
 
