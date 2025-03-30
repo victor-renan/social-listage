@@ -39,7 +39,7 @@ class LinkedinStrategy implements SocialMediaStrategy
             $response = Http::withHeaders($headers)
                 ->timeout(5)
                 ->get("$this->videoUrl/" . $item['content']['media']['id']);
-            return $response->ok() ? $response->json()['downloadUrl'] : null;
+            return $response->ok() ? $response->json()['thumbnail'] : null;
         }
 
         return null;
@@ -56,7 +56,6 @@ class LinkedinStrategy implements SocialMediaStrategy
 
         foreach ($json['elements'] as $post) {
             if ($this->filter($post)) {
-
                 array_push($filtered, [
                     'url' => $this->fetchPostUrl($post),
                     'image_url' => $this->fetchImageUrl($post, $headers)
